@@ -38,4 +38,5 @@ dependencies {
     apt 'com.google.dagger:dagger-compiler:2.1-SNAPSHOT'
     compile 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.squareup.sqlbrite:sqlbrite:0.2.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

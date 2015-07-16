@@ -10,5 +10,5 @@ import rx.Observable;
 public interface Api {
     @GET("/txapi/mvtp/meinv")
     @Headers("apikey: " + Config.API_KEY)
-    Observable<Map<String, String>> mvtp(@Query("num") String num);
+    Observable<Map<String, Object>> mvtp(@Query("num") String num);
 }

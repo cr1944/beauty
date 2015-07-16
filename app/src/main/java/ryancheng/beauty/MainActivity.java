@@ -17,7 +17,7 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Action1<List<Entity>> {
     @Bind(R.id.recyclerview)
     RecyclerView recyclerView;
     @Bind(R.id.progressbar)
@@ -56,15 +56,15 @@ public class MainActivity extends AppCompatActivity {
                 .map(Entity.MAP)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mainAdapter));
+                .subscribe(this));
         subscriptions.add(beautyComponent.getApi()
                 .mvtp("10")
                 .map(Entity.MAP_NET)
                 .doOnNext(new Action1<List<Entity>>() {
                     @Override
                     public void call(List<Entity> entities) {
-                        //beautyComponent.getBriteDatabase()
-                        //        .delete(Entity.TABLE, null, null);
+                        beautyComponent.getBriteDatabase()
+                                .delete(Entity.TABLE, null, null);
                         for (Entity entity : entities) {
                             beautyComponent.getBriteDatabase()
                                     .insert(Entity.TABLE, entity.toContentValues());
@@ -73,12 +73,13 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Entity>>() {
-                    @Override
-                    public void call(List<Entity> entities) {
-                        mainAdapter.notifyDataSetChanged();
-                    }
-                }));
+                .subscribe(this));
+    }
+
+    @Override
+    public void call(List<Entity> data) {
+        mainAdapter.setData(data);
+        progressBar.hide();
     }
 
     @Override

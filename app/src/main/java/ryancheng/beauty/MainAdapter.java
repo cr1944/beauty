@@ -2,22 +2,24 @@ package ryancheng.beauty;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.functions.Action1;
 
 /**
  * Create time: 2015/7/15.
  */
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.VH> implements Action1<List<Entity>> {
+public class MainAdapter extends RecyclerView.Adapter<MainAdapter.VH> {
     private List<Entity> data;
     private Context context;
 
@@ -28,14 +30,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.VH> implements
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.layout_main_item, parent, false);
-        VH vh = new VH(v);
-        return vh;
+        return new VH(v);
     }
 
     @Override
     public void onBindViewHolder(VH holder, int position) {
         Entity entity = data.get(position);
-        holder.titleView.setText(entity.title);
+        holder.titleView.setText(Html.fromHtml(entity.title));
+        Picasso.with(context).load(entity.picUrl).into(holder.imageView);
     }
 
     @Override
@@ -43,8 +45,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.VH> implements
         return data.size();
     }
 
-    @Override
-    public void call(List<Entity> data) {
+    public void setData(List<Entity> data) {
         this.data = data;
         notifyDataSetChanged();
     }

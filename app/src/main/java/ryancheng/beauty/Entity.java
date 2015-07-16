@@ -6,10 +6,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -60,14 +60,16 @@ public class Entity implements Parcelable {
         }
     };
 
-    public static Func1<Map<String, String>, List<Entity>> MAP_NET = new Func1<Map<String, String>, List<Entity>>() {
+    public static Func1<Map<String, Object>, List<Entity>> MAP_NET = new Func1<Map<String, Object>, List<Entity>>() {
         @Override
-        public List<Entity> call(Map<String, String> map) {
+        public List<Entity> call(Map<String, Object> map) {
             List<Entity> values = new ArrayList<>();
             for (String key : map.keySet()) {
                 if (!key.equals("code") && !key.equals("msg")) {
-                    String value = map.get(key);
-                    values.add(new Gson().fromJson(value, Entity.class));
+                    Object value = map.get(key);
+                    Gson gson = new Gson();
+                    String entity = gson.toJson(value);
+                    values.add(gson.fromJson(entity, Entity.class));
                 }
             }
             return values;

@@ -52,6 +52,7 @@ public class BeautyModule {
     Api provideApi() {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Config.HOST)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
         return restAdapter.create(Api.class);
     }
