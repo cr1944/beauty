@@ -3,6 +3,7 @@ package ryancheng.beauty;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
@@ -35,8 +36,7 @@ public class MainActivity extends AppCompatActivity implements Action1<List<Enti
         beautyComponent = app.getBeautyComponent();
         subscriptions = new CompositeSubscription();
         mainAdapter = new MainAdapter(this);
-        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2,
-                StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mainAdapter);
         query();
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements Action1<List<Enti
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this));
         subscriptions.add(beautyComponent.getApi()
-                .mvtp("10")
+                .mvtp("20")
                 .map(Entity.MAP_NET)
                 .doOnNext(new Action1<List<Entity>>() {
                     @Override

@@ -30,12 +30,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.VH> {
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.layout_main_item, parent, false);
-        return new VH(v);
+        return new VH(v, this);
     }
 
     @Override
     public void onBindViewHolder(VH holder, int position) {
         Entity entity = data.get(position);
+        holder.position = position;
         holder.titleView.setText(Html.fromHtml(entity.title));
         Picasso.with(context).load(entity.picUrl).into(holder.imageView);
     }
@@ -50,15 +51,26 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.VH> {
         notifyDataSetChanged();
     }
 
+    public void onItemClick(int position) {
+        Entity entity = data.get(position);
+    }
+
     public static class VH extends RecyclerView.ViewHolder {
         @Bind(R.id.pic)
         ImageView imageView;
         @Bind(R.id.title)
         TextView titleView;
+        int position;
 
-        public VH(View itemView) {
+        public VH(View itemView, final MainAdapter adapter) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.onItemClick(position);
+                }
+            });
         }
     }
 }
